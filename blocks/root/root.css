@@ -1,0 +1,8 @@
+.root {
+    max-width: 100vw;
+    background: #000000;
+}
+
+* {
+    outline: 1px solid red;
+}
