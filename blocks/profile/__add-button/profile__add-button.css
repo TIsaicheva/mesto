@@ -12,7 +12,7 @@
 .profile__add-button:hover {
     background: url(../../../images/add_button_hov.svg) no-repeat center;
     border: 2px solid rgba(255, 255, 255, 0.6);
-    transition: all 0.5s ease-out;
+    transition: all 0.3s linear;
 }
 
 @media (max-width: 670px) {

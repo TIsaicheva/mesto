@@ -8,7 +8,7 @@
 
 .profile__info-edit-button:hover {     
     background: url(../../../images/edit_button_hov.svg) no-repeat center;
-    transition: all 0.5s ease-out;
+    transition: all 0.3s linear;
 }
 
 @media (max-width: 670px) {

@@ -21,6 +21,7 @@
 
 @import url(../blocks/item/item.css);
 @import url(../blocks/item/__image/item__image.css);
+@import url(../blocks/item/__wrapper/item__wrapper.css);
 @import url(../blocks/item/__text/item__text.css);
 @import url(../blocks/item/__like-icon/item__like-icon.css);
 

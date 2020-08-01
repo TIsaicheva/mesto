@@ -7,8 +7,14 @@
     align-items: center;
     position: relative;
     justify-content: space-between;
+    
 }
 
+@media (max-width: 768px) {
+    .profile {
+        padding: 40px 15px 0; 
+    }
+}
 
 @media (max-width: 670px) {
     .profile {
