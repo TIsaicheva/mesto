@@ -7,7 +7,7 @@
 
 **gh-pages**
 
-* [Ссылка проекта на GitHub Pages](https://tisaicheva.github.io/mesto/index.html)
+* Проекта на GitHub Pages - https://tisaicheva.github.io/mesto/index.html
 
 **Figma**
 
