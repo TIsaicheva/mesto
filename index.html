@@ -11,6 +11,17 @@
             <div class="logo"></div>
         </header>
         <div class="line"></div>
+        <div class="popup">
+            <div class="popup__container">
+                <button type="button" aria-label="Закрыть попап" class="popup__close"></button> 
+                <h2 class="popup__title">Редактировать профиль</h2>        
+                <form action="" class="popup__form">                                      
+                    <input class="popup__input" id="userName" type="text" placeholder="Имя">                    
+                    <input class="popup__input" id="userDescription" type="text" placeholder="О себе">
+                    <button type="submit" class="popup__submit">Сохранить</button>                
+                </form>                              
+            </div>
+        </div>
         <section class="profile">
             <div class="profile__data">
                 <div class="profile__avatar"></div>
@@ -71,5 +82,6 @@
         <footer class="footer">
             <p class="footer__copyright">© 2020 Mesto Russia</p>
         </footer>
+        <script src="/script.js"></script>
     </body>
 </html>

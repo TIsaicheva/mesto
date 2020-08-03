@@ -1,11 +1,10 @@
 .profile__info {
     max-width: 366px;    
-    /* правый паддинг 30px указанный в % */ 
-    padding: 0 0 0 3%;   
+    padding: 0 0 0 25px;   
     color: white;
     display: grid;
-    grid-template-columns: 295px 24px;
-    grid-template-rows: 43px 18px;
+    grid-template-columns: max-content 24px;
+    grid-template-rows: min-content;
     row-gap: 16px;
     column-gap: 17px;
 }
