@@ -8,21 +8,15 @@ let popupCloseBtn = popup.querySelector('.popup__close');
 let formElement = popup.querySelector('.popup__form');
 let nameInput = popup.querySelector('#userName');
 let descriptInput = popup.querySelector('#userDescription');
-let saveButton = formElement.querySelector('.popup__submit');  
-
-function openPopup(evt) {
-    evt.preventDefault();
-    let popup = document.querySelector('.popup');
-    popup.classList.toggle('popup_opened');    
-}
-
-function closePopup(evt) {
-    if(evt.target !== evt.currentTarget) return; 
-    openPopup(evt);
-}
 
 function popupToggle() {
-    popup.classList.toggle('popup_opened');
+    if(!popup.classList.contains('.popup_opened')) {
+        popup.classList.toggle('popup_opened');
+        nameInput.value = userTitle.textContent;
+        descriptInput.value = userSubtitle.textContent;
+    } else {
+        popup.classList.toggle('popup_opened');
+    } 
 }
 
 function formSubmitHandler(evt) {
@@ -31,12 +25,9 @@ function formSubmitHandler(evt) {
     userTitle.textContent = nameInput.value;
     userSubtitle.textContent = descriptInput.value;
 
-    closePopup(evt);
+    popupToggle();
 }
 
-nameInput.value = userTitle.textContent;
-descriptInput.value = userSubtitle.textContent;
-edditButton.addEventListener('click', openPopup);
+edditButton.addEventListener('click', popupToggle);
 popupCloseBtn.addEventListener('click', popupToggle);
-popup.addEventListener('click', closePopup);
 formElement.addEventListener('submit', formSubmitHandler);

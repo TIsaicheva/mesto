@@ -6,6 +6,8 @@
     transform: scale(1);
     transition: transform .3s;
     cursor: pointer;
+    outline: none;
+    border: none;
 }
 
 .item__like-icon:hover {
