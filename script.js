@@ -56,8 +56,7 @@ function selectTemplate() {
     return document.querySelector('#itemTemplate').content.cloneNode(true);     
 }
 
-const addCardToGallery = el => {  
-    // console.log(el.name);    
+const addCardToGallery = el => {       
     const galleryItem = selectTemplate();
     galleryItem.querySelector('.item__text').textContent = el.name;
     galleryItem.querySelector('.item__image').src = el.link;
@@ -67,17 +66,15 @@ const addCardToGallery = el => {
 
 const openPopupImage = evt => {    
     // вствляем изображение картинки, по которой кликнули в popup-картинки
-    placeImageUrl.src = evt.target.src;
+    placeImageUrl.src = evt.target.src;    
     // вствляем название картинки, по которой кликнули в popup-картинки
     placeName.textContent = evt.target.nextElementSibling.textContent;    
 };
 
 initialCards.forEach(addCardToGallery);
 
-function popupToggle(evt) {
-    console.log(evt.target.parentElement.parentElement);
-    const targetPopup = evt.target.classList[0];
-    console.log(`это событие которое приходит ${targetPopup}`);
+function popupToggle(evt) {    
+    const targetPopup = evt.target.classList[0];    
     targetPopupParent = evt.target.parentElement.parentElement;    
 
     switch (targetPopup) {
@@ -170,8 +167,7 @@ document.addEventListener('click', event => {
         const deleteItem = event.target.closest('.item');
 
         deleteItem.remove();
-    } else if (target.classList.contains('item__image')) {
-        console.log(target.className);
+    } else if (target.classList.contains('item__image')) {        
         popupToggle(event);
     }
 
