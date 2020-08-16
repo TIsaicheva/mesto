@@ -29,19 +29,20 @@ const initialCards = [
 const usePprofile = document.querySelector('.profile');
 const editButton = usePprofile.querySelector('.profile__info-edit-button');
 const addButton = usePprofile.querySelector('.profile__add-button');
-let userTitle = usePprofile.querySelector('.profile__info-title');
-let userSubtitle = usePprofile.querySelector('.profile__info-subtitle');
+const userTitle = usePprofile.querySelector('.profile__info-title');
+const userSubtitle = usePprofile.querySelector('.profile__info-subtitle');
 
 // popup-редактирования профиля
-const popup = document.querySelector('.popup');
-const formElement = popup.querySelector('.popup__form');
-let nameInput = popup.querySelector('#userName');
-let descriptInput = popup.querySelector('#userDescription');
+const editPopup = document.querySelector('.popup-edit');
+const formElement = editPopup.querySelector('.popup__form');
+const nameInput = editPopup.querySelector('#userName');
+const descriptInput = editPopup.querySelector('#userDescription');
+
 // popup-добавления карточки
-const addPopup = document.querySelector('.add');
+const addPopup = document.querySelector('.popup-add');
 const addFormElement = addPopup.querySelector('.popup__form');
-let placeNameInput = addPopup.querySelector('#placeName');
-let placeImageInput = addPopup.querySelector('#placeImageUrl');
+const placeNameInput = addPopup.querySelector('#placeName');
+const placeImageInput = addPopup.querySelector('#placeImageUrl');
 
 // popup-картинки
 const imagePopup = document.querySelector('.popup-image');
@@ -49,7 +50,7 @@ const image = imagePopup.querySelector('.popup_image');
 const placeName = imagePopup.querySelector('.popup__place-name');
 const placeImageUrl = imagePopup.querySelector('.popup__image');
 
-const galleryItemsContainer = document.querySelector('.gallery__items');
+let galleryItemsContainer = document.querySelector('.gallery__items');
 
 function selectTemplate() {
     //находим template по id, получаем его содержимое через content и клонируем всё содержимое в переменную
@@ -60,58 +61,15 @@ const addCardToGallery = el => {
     const galleryItem = selectTemplate();
     galleryItem.querySelector('.item__text').textContent = el.name;
     galleryItem.querySelector('.item__image').src = el.link;
-
-    galleryItemsContainer.prepend(galleryItem);
-};
-
-const openPopupImage = evt => {    
-    // вствляем изображение картинки, по которой кликнули в popup-картинки
-    placeImageUrl.src = evt.target.src;    
-    // вствляем название картинки, по которой кликнули в popup-картинки
-    placeName.textContent = evt.target.nextElementSibling.textContent;    
+    
+    galleryItemsContainer.prepend(galleryItem);   
+    galleryItemsContainer = document.querySelector('.gallery__items');
 };
 
 initialCards.forEach(addCardToGallery);
 
-function popupToggle(evt) {    
-    const targetPopup = evt.target.classList[0];    
-    targetPopupParent = evt.target.parentElement.parentElement;    
-
-    switch (targetPopup) {
-        case 'profile__info-edit-button':
-            // открытие popup-редактирования профиля           
-            popup.classList.toggle('popup_opened');
-            nameInput.value = userTitle.textContent;
-            descriptInput.value = userSubtitle.textContent;
-            break;
-        case 'profile__add-button':
-            // открытие popup-добавления карточки   
-            addPopup.classList.toggle('popup_opened');
-            break;
-        case 'popup__form':
-            // закрытие popup-редактирования профиля, при нажатии кнопки Сохранить
-            // закрытие popup-добавления карточки, при нажатии кнопки Сохранить
-            if (targetPopupParent.classList.contains('add')) {
-                addPopup.classList.toggle('popup_opened');
-            } else popup.classList.toggle('popup_opened');
-            break;
-        case 'popup__close':
-            if (targetPopupParent.classList.contains('add')) {
-                // закрытие popup-добавления карточки 
-                addPopup.classList.toggle('popup_opened');
-            } else if (targetPopupParent.classList.contains('popup-image')) {
-                // закрытие popup-картинки 
-                imagePopup.classList.toggle('popup_opened');
-            } else
-                // закрытие popup-редактирования профиля
-                popup.classList.toggle('popup_opened');
-            break;
-        case 'item__image':
-            // открытие popup-картинки   
-            imagePopup.classList.toggle('popup_opened');
-            openPopupImage(evt);        
-            break;
-    }
+function popupToggle(popup) {
+    popup.classList.toggle('popup_opened');
 }
 
 function editFormSubmitHandler(evt) {
@@ -120,7 +78,7 @@ function editFormSubmitHandler(evt) {
     userTitle.textContent = nameInput.value;
     userSubtitle.textContent = descriptInput.value;
 
-    popupToggle(evt);
+    popupToggle(editPopup);
 }
 
 function addFormSubmitHandler(evt) {
@@ -131,44 +89,65 @@ function addFormSubmitHandler(evt) {
     }
 
     card.name = placeNameInput.value;
-    card.link = placeImageInput.value;
+    card.link = placeImageInput.value;   
 
-    // проверить, что поля не пустые
-    if (card.name.length > 0 && card.link.length > 0) {
-        addCardToGallery(card);
-    }
-
-    popupToggle(evt);
+    addCardToGallery(card);
+    popupToggle(addPopup);   
 }
 
-editButton.addEventListener('click', popupToggle);
-addButton.addEventListener('click', popupToggle);
+// отслеживаем клик по кнопке edit профайл
+// открываем popup-редактирования профиля
+// копируем данные из input-полей на страницу
+editButton.addEventListener('click', function(){    
+    popupToggle(editPopup);
+    nameInput.value = userTitle.textContent;
+    descriptInput.value = userSubtitle.textContent;
+});
+// отслеживаем клик по кнопке add
+// открываем popup-добавления карточки
+addButton.addEventListener('click', function(){
+    popupToggle(addPopup);
+});
 formElement.addEventListener('submit', editFormSubmitHandler);
 addFormElement.addEventListener('submit', addFormSubmitHandler);
 
-// выбираем все кнопки закрытия popup
-// ищем среди них кнопку, у которой ближайший родитель имеет класс add
-// устанавливаем на нужной кнопке addEventListener
-document.querySelectorAll('.popup__close').forEach(el => {
-    if (el.parentElement.parentElement.classList.contains('add')) {
-        el.addEventListener('click', popupToggle);
-    } else el.addEventListener('click', popupToggle);
+// находим все popup-окна
+// у каждого popup-окна находим кнопку с классом popup__close
+// каждой кнопке закрытия popup-окна устанавливаем addEventListener
+const popups = document.querySelectorAll('.popup').forEach(popup => {
+    popup.querySelector('.popup__close').addEventListener('click', function(){
+        popupToggle(popup);
+    })
 });
 
-document.addEventListener('click', event => {
-    // отслеживаем по какой кнопке был клик
-    const target = event.target;
-
-    // добавляем класс active иконке like
-    if (target.classList.contains('item__like-icon')) {
-        target.classList.toggle('item__like-icon_active');
-    } else if (target.classList.contains('item__delete')) {
-        // выбираем елемент, который нужно удалить
-        const deleteItem = event.target.closest('.item');
-
-        deleteItem.remove();
-    } else if (target.classList.contains('item__image')) {        
-        popupToggle(event);
+galleryItemsContainer.addEventListener('click', function(evt){
+    const target = evt.target.classList;    
+    if(target.contains('item__delete')){        
+        deleteItem(evt);
+    } else if(target.contains('item__like-icon')){
+        likeImage(evt);
+    } else if(target.contains('item__image')) {
+        popupToggle(imagePopup);
+        renderPopupImage(evt)
     }
-
 });
+
+// поставить лайк карточке в галлерее
+function likeImage(evt){
+    evt.target.classList.toggle('item__like-icon_active');
+}
+
+// удалить карточку из галлереи
+function deleteItem(evt){
+    const delItem = evt.target.closest('.item');
+
+    delItem.remove();
+}
+
+// открыть изображение карточки
+function renderPopupImage(evt) {    
+    // вствляем изображение картинки, по которой кликнули в popup-картинки
+    placeImageUrl.src = evt.target.src; 
+    // вствляем название картинки, по которой кликнули в popup-картинки
+    placeName.textContent = evt.target.nextElementSibling.textContent;
+};

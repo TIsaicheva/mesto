@@ -10,7 +10,26 @@
         <header class="header">
             <div class="logo"></div>
         </header>
-        <div class="popup">
+        <section class="profile">
+            <div class="profile__data">
+                <div class="profile__avatar"></div>
+                <div class="profile__info">
+                    <h1 class="profile__info-title">Жак-Ив Кусто</h1>
+                    <button class="profile__info-edit-button" type="button"></button>
+                    <p class="profile__info-subtitle">Исследователь океана</p>
+                </div>
+            </div>
+            <button class="profile__add-button" type="button"></button>
+        </section>
+        <section class="gallery">
+            <ul class="gallery__items">
+            </ul>
+        </section>
+        <footer class="footer">
+            <p class="footer__copyright">© 2020 Mesto Russia</p>
+        </footer>
+
+        <div class="popup popup-edit">
             <div class="popup__container">
                 <button type="button" aria-label="Закрыть попап"
                     class="popup__close"></button>
@@ -25,7 +44,7 @@
             </div>
         </div>
 
-        <div class="popup add">
+        <div class="popup popup-add">
             <div class="popup__container">
                 <button type="button" aria-label="Закрыть попап"
                     class="popup__close"></button>
@@ -51,24 +70,6 @@
             </div>
         </div>
 
-        <section class="profile">
-            <div class="profile__data">
-                <div class="profile__avatar"></div>
-                <div class="profile__info">
-                    <h1 class="profile__info-title">Жак-Ив Кусто</h1>
-                    <button class="profile__info-edit-button" type="button"></button>
-                    <p class="profile__info-subtitle">Исследователь океана</p>
-                </div>
-            </div>
-            <button class="profile__add-button" type="button"></button>
-        </section>
-        <section class="gallery">
-            <ul class="gallery__items">
-            </ul>
-        </section>
-        <footer class="footer">
-            <p class="footer__copyright">© 2020 Mesto Russia</p>
-        </footer>
         <template id="itemTemplate">
             <li class="item">
                 <button class="item__delete"></button>
