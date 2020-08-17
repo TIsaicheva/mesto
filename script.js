@@ -50,7 +50,7 @@ const image = imagePopup.querySelector('.popup_image');
 const placeName = imagePopup.querySelector('.popup__place-name');
 const placeImageUrl = imagePopup.querySelector('.popup__image');
 
-let galleryItemsContainer = document.querySelector('.gallery__items');
+const galleryItemsContainer = document.querySelector('.gallery__items');
 
 function selectTemplate() {
     //находим template по id, получаем его содержимое через content и клонируем всё содержимое в переменную
@@ -62,8 +62,7 @@ const addCardToGallery = el => {
     galleryItem.querySelector('.item__text').textContent = el.name;
     galleryItem.querySelector('.item__image').src = el.link;
     
-    galleryItemsContainer.prepend(galleryItem);   
-    galleryItemsContainer = document.querySelector('.gallery__items');
+    galleryItemsContainer.prepend(galleryItem);    
 };
 
 initialCards.forEach(addCardToGallery);
