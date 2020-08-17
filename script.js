@@ -106,6 +106,8 @@ editButton.addEventListener('click', function(){
 // открываем popup-добавления карточки
 addButton.addEventListener('click', function(){
     popupToggle(addPopup);
+    placeNameInput.value = '';
+    placeImageInput.value = '';
 });
 formElement.addEventListener('submit', editFormSubmitHandler);
 addFormElement.addEventListener('submit', addFormSubmitHandler);
@@ -113,7 +115,8 @@ addFormElement.addEventListener('submit', addFormSubmitHandler);
 // находим все popup-окна
 // у каждого popup-окна находим кнопку с классом popup__close
 // каждой кнопке закрытия popup-окна устанавливаем addEventListener
-const popups = document.querySelectorAll('.popup').forEach(popup => {
+const popups = document.querySelectorAll('.popup');
+popups.forEach(popup => {
     popup.querySelector('.popup__close').addEventListener('click', function(){
         popupToggle(popup);
     })
