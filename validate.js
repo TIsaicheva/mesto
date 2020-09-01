@@ -14,10 +14,8 @@ function isValid(formElement, inputElement, { ...rest }) {
     const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
     if (!inputElement.validity.valid) {
         showInputError(formElement, inputElement, errorElement, inputElement.validationMessage, rest);
-
     } else {
         hideInputError(formElement, inputElement, errorElement, rest);
-
     }
 }
 
@@ -35,33 +33,40 @@ function toggleButtonState(inputList, buttonElement, { inactiveButtonClass, ...r
     }
 }
 
-function setEventListeners(formElement, { inputSelector, submitButtonSelector, ...rest }) {
-    const inputList = Array.from(formElement.querySelectorAll(inputSelector));
-    const button = formElement.querySelector(submitButtonSelector);
+function setEventListeners(popup, { inputSelector, submitButtonSelector, ...rest }) {
+    const inputList = Array.from(popup.querySelectorAll(inputSelector));
+    const button = popup.querySelector(submitButtonSelector);
 
     toggleButtonState(inputList, button, rest);
 
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function () {
-            isValid(formElement, inputElement, rest);
+            isValid(popup, inputElement, rest);
             toggleButtonState(inputList, button, rest);
         })
     });
 }
 
-function enableValidation({ formSelector, ...rest }) {
-    const popupFormList = Array.from(document.querySelectorAll(formSelector));
+function enableValidation({ popupSelector, ...rest }) {
 
-    popupFormList.forEach((popupForm) => {
-        popupForm.addEventListener('submit', (evt) => {
-            evt.preventDefault();
-        })        
-        
-        setEventListeners(popupForm, rest);
-    });
+    document.addEventListener('click', (evt) => {
+        const popupList = Array.from(document.querySelectorAll(popupSelector));        
+
+        popupList.forEach((popupForm) => {
+
+            if (popupForm.classList.contains('popup_opened')) {
+                popupForm.addEventListener('submit', (evt) => {
+                    evt.preventDefault();
+                })
+
+                setEventListeners(popupForm, rest);
+            }
+        });
+    })
 }
 
 enableValidation({
+    popupSelector: '.popup',
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__submit',

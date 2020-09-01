@@ -158,7 +158,9 @@ editButton.addEventListener('click', function () {
 // открываем popup-добавления карточки
 
 addButton.addEventListener('click', function () {
+    
     openPopup(addPopup);
+   
     placeNameInput.value = '';
     placeImageInput.value = '';
 });
