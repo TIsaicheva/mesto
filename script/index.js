@@ -37,11 +37,16 @@ function getAddCardValues() {
     return card;
 }
 
-function createCard(cardValues) {
+function createCard(newCard) {
     //находим template по id, получаем его содержимое через content и клонируем всё содержимое
-    const galleryItem = document.querySelector('#itemTemplate').content.cloneNode(true);
-    galleryItem.querySelector('.item__text').textContent = cardValues.name;
-    galleryItem.querySelector('.item__image').src = cardValues.link;
+    const cardTemplate = document.querySelector('#itemTemplate').content;
+    const galleryItem = cardTemplate.cloneNode(true);
+
+    console.log(galleryItem)
+
+
+    galleryItem.querySelector('.item__text').textContent = newCard.name;
+    galleryItem.querySelector('.item__image').src = newCard.link;
 
     return galleryItem;
 }
@@ -91,11 +96,13 @@ function hidePopupError(popupElement) {
     });
 }
 
-// disable кнопку submit при каждом открытии popup 
+// disable кнопку submit при каждом открытии popup-формы
 function disableBtn(popup) {
-    const popupInputList = Array.from(popup.querySelectorAll('.popup__input'));
-    const submitBtn = popup.querySelector('.popup__submit');
-    toggleButtonState(popupInputList, submitBtn, parameters);
+    if (!popup.classList.contains('popup-image')) {
+        const popupInputList = Array.from(popup.querySelectorAll('.popup__input'));
+        const submitBtn = popup.querySelector('.popup__submit');
+        toggleButtonState(popupInputList, submitBtn, parameters);
+    }
 }
 
 function openPopup(popup) {
