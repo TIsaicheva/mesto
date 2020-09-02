@@ -28,6 +28,7 @@ const card = { name: '', link: '' };
 
 const keyCodeEsc = 'Escape';
 const keyCodeEntr = 'Enter';
+const parameters = formParameters;
 
 function getAddCardValues() {
     card.name = placeNameInput.value;
@@ -90,8 +91,16 @@ function hidePopupError(popupElement) {
     });
 }
 
+// disable кнопку submit при каждом открытии popup 
+function disableBtn(popup) {
+    const popupInputList = Array.from(popup.querySelectorAll('.popup__input'));
+    const submitBtn = popup.querySelector('.popup__submit');
+    toggleButtonState(popupInputList, submitBtn, parameters);
+}
+
 function openPopup(popup) {
     popup.classList.add('popup_opened');
+    disableBtn(popup);
     popup.addEventListener('click', overlayPopup);
     popup.addEventListener('click', pressCloseIcon);
     addEventListener('keydown', closePopupByEsc);
@@ -103,6 +112,7 @@ function closePopup(popup) {
     popup.removeEventListener('click', overlayPopup);
     popup.removeEventListener('click', pressCloseIcon);
     removeEventListener('keydown', closePopupByEsc);
+    addFormElement.reset();
 }
 
 function editFormSubmitHandler(evt) {
