@@ -42,9 +42,6 @@ function createCard(newCard) {
     const cardTemplate = document.querySelector('#itemTemplate').content;
     const galleryItem = cardTemplate.cloneNode(true);
 
-    console.log(galleryItem)
-
-
     galleryItem.querySelector('.item__text').textContent = newCard.name;
     galleryItem.querySelector('.item__image').src = newCard.link;
 
@@ -118,8 +115,7 @@ function closePopup(popup) {
     popup.classList.remove('popup_opened');
     popup.removeEventListener('click', overlayPopup);
     popup.removeEventListener('click', pressCloseIcon);
-    removeEventListener('keydown', closePopupByEsc);
-    addFormElement.reset();
+    removeEventListener('keydown', closePopupByEsc);    
 }
 
 function editFormSubmitHandler(evt) {
