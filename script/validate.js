@@ -7,13 +7,13 @@ const formParameters = {
     errorClass: 'popup__form-error_visible'
 };
 
-function showInputError(form, input, error, errorMessage, { inputErrorClass, errorClass }) {
+function showInputError(input, error, errorMessage, { inputErrorClass, errorClass }) {
     input.classList.add(inputErrorClass);
     error.classList.add(errorClass);
     error.textContent = errorMessage;
 }
 
-function hideInputError(form, input, error, { inputErrorClass, errorClass }) {
+function hideInputError(input, error, { inputErrorClass, errorClass }) {
     input.classList.remove(inputErrorClass);
     error.classList.remove(errorClass);
     error.textContent = '';
@@ -22,9 +22,9 @@ function hideInputError(form, input, error, { inputErrorClass, errorClass }) {
 function isValid(formElement, inputElement, { ...rest }) {
     const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
     if (!inputElement.validity.valid) {
-        showInputError(formElement, inputElement, errorElement, inputElement.validationMessage, rest);
+        showInputError(inputElement, errorElement, inputElement.validationMessage, rest);
     } else {
-        hideInputError(formElement, inputElement, errorElement, rest);
+        hideInputError(inputElement, errorElement, rest);
     }
 }
 
@@ -34,7 +34,7 @@ function hasInvalidInput(inputList) {
     })
 }
 
-function toggleButtonState(inputList, buttonElement, { inactiveButtonClass, ...rest }) {    
+function toggleButtonState(inputList, buttonElement, { inactiveButtonClass, ...rest }) {
     if (hasInvalidInput(inputList)) {
         buttonElement.classList.add(inactiveButtonClass);
         buttonElement.setAttribute('disabled', '');
@@ -42,6 +42,20 @@ function toggleButtonState(inputList, buttonElement, { inactiveButtonClass, ...r
         buttonElement.classList.remove(inactiveButtonClass);
         buttonElement.removeAttribute('disabled');
     }
+}
+
+function resetForm(popupElement, { inputSelector, submitButtonSelector, ...rest }) {
+    const popupInputs = Array.from(popupElement.querySelectorAll(inputSelector));
+    const button = popupElement.querySelector(submitButtonSelector);
+    
+    // Блокировка кнопки 
+    toggleButtonState(popupInputs, button, rest);
+    
+    // Очистка формы от ошибок
+    popupInputs.forEach((input) => {
+        const popupErrorTexts = popupElement.querySelector(`#${input.id}-error`);
+        hideInputError(input, popupErrorTexts, rest);
+    });
 }
 
 function setEventListeners(formElement, { inputSelector, submitButtonSelector, ...rest }) {

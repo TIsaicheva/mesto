@@ -28,6 +28,7 @@ const card = { name: '', link: '' };
 
 const keyCodeEsc = 'Escape';
 const keyCodeEntr = 'Enter';
+const popupParameters = formParameters;
 
 function getAddCardValues() {
     card.name = placeNameInput.value;
@@ -79,38 +80,14 @@ function pressCloseIcon(evt) {
     }
 }
 
-function hidePopupError(popupElement) {
-    const popupTextError = popupElement.querySelectorAll('.popup__form-error');
-    const popupInputError = popupElement.querySelectorAll('.popup__input');
-
-    popupTextError.forEach((textError) => {
-        textError.textContent = '';
-    })
-
-    popupInputError.forEach((inputError) => {
-        inputError.classList.remove('popup__input_type_error');
-    });
-}
-
-// disable кнопку submit при каждом открытии popup-формы
-function disableBtn(popup) {
-    const submitBtn = popup.querySelector('.popup__submit');
-    if (popup.classList.contains('popup-add') || popup.classList.contains('popup-edit')) {
-        submitBtn.classList.add('popup__submit_disabled');
-        submitBtn.setAttribute('disabled', true);
-    }
-}
-
 function openPopup(popup) {
-    popup.classList.add('popup_opened');
-    disableBtn(popup);
+    popup.classList.add('popup_opened');   
     popup.addEventListener('click', overlayPopup);
     popup.addEventListener('click', pressCloseIcon);
     addEventListener('keydown', closePopupByEsc);
 }
 
-function closePopup(popup) {
-    hidePopupError(popup);
+function closePopup(popup) {    
     popup.classList.remove('popup_opened');
     popup.removeEventListener('click', overlayPopup);
     popup.removeEventListener('click', pressCloseIcon);
@@ -141,6 +118,8 @@ editButton.addEventListener('click', function () {
 
     nameInput.value = userTitle.textContent;
     descriptInput.value = userSubtitle.textContent;
+
+    resetForm(editPopup, formParameters);
 });
 
 // отслеживаем клик по кнопке add
@@ -150,6 +129,8 @@ addButton.addEventListener('click', function () {
 
     placeNameInput.value = '';
     placeImageInput.value = '';
+    
+    resetForm(addPopup, formParameters); 
 });
 
 formElement.addEventListener('submit', editFormSubmitHandler);
