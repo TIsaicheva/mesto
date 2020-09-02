@@ -1,31 +1,4 @@
 
-const initialCards = [
-    {
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-];
-
 const usePprofile = document.querySelector('.profile');
 const editButton = usePprofile.querySelector('.profile__info-edit-button');
 const addButton = usePprofile.querySelector('.profile__add-button');
@@ -51,31 +24,28 @@ const placeName = imagePopup.querySelector('.popup__place-name');
 const placeImageUrl = imagePopup.querySelector('.popup__image');
 
 const galleryItemsContainer = document.querySelector('.gallery__items');
-const card = {name: '', link: ''};
+const card = { name: '', link: '' };
 
 const keyCodeEsc = 'Escape';
 const keyCodeEntr = 'Enter';
 
-//находим template по id, получаем его содержимое через content и клонируем всё содержимое
-function selectTemplate() {
-    return document.querySelector('#itemTemplate').content.cloneNode(true);
-}
-
-function getInputValue() {
+function getAddCardValues() {
     card.name = placeNameInput.value;
     card.link = placeImageInput.value;
 
     return card;
 }
 
-function createCard(cardInfo) {
-    const galleryItem = selectTemplate();
-    galleryItem.querySelector('.item__text').textContent = cardInfo.name;
-    galleryItem.querySelector('.item__image').src = cardInfo.link;
+function createCard(cardValues) {
+    //находим template по id, получаем его содержимое через content и клонируем всё содержимое
+    const galleryItem = document.querySelector('#itemTemplate').content.cloneNode(true);
+    galleryItem.querySelector('.item__text').textContent = cardValues.name;
+    galleryItem.querySelector('.item__image').src = cardValues.link;
+
     return galleryItem;
 }
 
-function addCardToGallery(card) {    
+function addCardToGallery(card) {
     galleryItemsContainer.prepend(createCard(card));
 };
 
@@ -84,13 +54,6 @@ initialCards.forEach(addCardToGallery);
 // найти открытый попап
 function getOpenedPopup() {
     return document.querySelector('.popup_opened');
-}
-
-// закрытие попап кликом на клавишу Enter
-function closeByEnter(evt) {
-    if (evt.key === keyCodeEntr) {
-        closePopup(getOpenedPopup());
-    }
 }
 
 // закрытие попап кликом на клавишу Escape
@@ -107,26 +70,39 @@ function overlayPopup(evt) {
     }
 }
 
-// закрытие попап при клике на крестик или кнопку Сохранить
-function closeByButton(evt) {
-    if (evt.target.classList.contains('popup__close') || evt.target.classList.contains('popup__submit')) {
+// закрытие попап при клике на иконку 'крестик'
+function pressCloseIcon(evt) {
+    if (evt.target.classList.contains('popup__close')) {
         closePopup(getOpenedPopup());
     }
+}
+
+function hidePopupError(popupElement) {
+    const popupTextError = popupElement.querySelectorAll('.popup__form-error');
+    const popupInputError = popupElement.querySelectorAll('.popup__input');
+
+    popupTextError.forEach((textError) => {
+        textError.textContent = '';
+    })
+
+    popupInputError.forEach((inputError) => {
+        inputError.classList.remove('popup__input_type_error');
+    });
 }
 
 function openPopup(popup) {
     popup.classList.add('popup_opened');
     popup.addEventListener('click', overlayPopup);
-    popup.addEventListener('click', closeByButton);
-    addEventListener('keydown', closePopupByEsc);    
+    popup.addEventListener('click', pressCloseIcon);
+    addEventListener('keydown', closePopupByEsc);
 }
 
 function closePopup(popup) {
+    hidePopupError(popup);
     popup.classList.remove('popup_opened');
     popup.removeEventListener('click', overlayPopup);
-    popup.removeEventListener('click', closeByButton);
+    popup.removeEventListener('click', pressCloseIcon);
     removeEventListener('keydown', closePopupByEsc);
-    removeEventListener('keydown', closeByEnter);
 }
 
 function editFormSubmitHandler(evt) {
@@ -135,14 +111,14 @@ function editFormSubmitHandler(evt) {
     userTitle.textContent = nameInput.value;
     userSubtitle.textContent = descriptInput.value;
 
-    // закрытие попап по клику на Enter
-    // addEventListener('keydown', closeByEnter);
+    closePopup(getOpenedPopup());
 }
 
 function addFormSubmitHandler(evt) {
-    evt.preventDefault();    
-   
-    addCardToGallery(getInputValue());
+    evt.preventDefault();
+
+    addCardToGallery(getAddCardValues());
+    closePopup(getOpenedPopup());
 }
 
 // отслеживаем клик по кнопке edit профайл
@@ -150,17 +126,16 @@ function addFormSubmitHandler(evt) {
 // копируем данные из input-полей на страницу
 editButton.addEventListener('click', function () {
     openPopup(editPopup);
+
     nameInput.value = userTitle.textContent;
     descriptInput.value = userSubtitle.textContent;
 });
 
 // отслеживаем клик по кнопке add
 // открываем popup-добавления карточки
-
 addButton.addEventListener('click', function () {
-    
     openPopup(addPopup);
-   
+
     placeNameInput.value = '';
     placeImageInput.value = '';
 });
