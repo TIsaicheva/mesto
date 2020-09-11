@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <template id="itemTemplate">
+        <template class="itemTemplate">
             <li class="item">
                 <button class="item__delete"></button>
                 <img src="#" alt="Фото" class="item__image">
@@ -86,8 +86,9 @@
                 </div>
             </li>
         </template>
-        <script src="script/initialCards.js"></script>
-        <script src="script/validate.js"></script> 
-        <script src="script/index.js"></script>
+        <script type="module" src="script/defaultCards.js"></script>
+        <script type="module" src="script/FormValidator.js"></script>
+        <script type="module" src="script/card.js"></script>
+        <script type="module" src="script/index.js"></script>
     </body>
 </html>
