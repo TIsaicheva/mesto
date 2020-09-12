@@ -1,27 +1,32 @@
 export class FormValidator {
     constructor(formParameters, form) {
         this._form = form;
-        this._parameters = formParameters;
+        this._inputSelector = formParameters.inputSelector;
+        this._submitButtonSelector = formParameters.submitButtonSelector;
+        this._inactiveButtonClass = formParameters.inactiveButtonClass;
+        this._inputErrorClass = formParameters.inputErrorClass;
+        this._errorClass = formParameters.errorClass;
+        this._openFormBtn = formParameters.formButton;
     }
 
-    _showInputError(input, error, errorMessage, { inputErrorClass, errorClass }) {
-        input.classList.add(inputErrorClass);
-        error.classList.add(errorClass);
+    _showInputError(input, error, errorMessage) {
+        input.classList.add(this._inputErrorClass);
+        error.classList.add(this._errorClass);
         error.textContent = errorMessage;
     }
 
-    _hideInputError(input, error, { inputErrorClass, errorClass }) {
-        input.classList.remove(inputErrorClass);
-        error.classList.remove(errorClass);
+    _hideInputError(input, error) {
+        input.classList.remove(this._inputErrorClass);
+        error.classList.remove(this._errorClass);
         error.textContent = '';
     }
 
-    _isValid(inputElement, { ...rest }) {
+    _isValid(inputElement) {
         const errorElement = this._form.querySelector(`#${inputElement.id}-error`);
         if (!inputElement.validity.valid) {
-            this._showInputError(inputElement, errorElement, inputElement.validationMessage, rest);
+            this._showInputError(inputElement, errorElement, inputElement.validationMessage);
         } else {
-            this._hideInputError(inputElement, errorElement, rest);
+            this._hideInputError(inputElement, errorElement);
         }
     }
 
@@ -29,15 +34,14 @@ export class FormValidator {
         return inputList.some((input) => {
             return !input.validity.valid;
         })
-
     }
 
-    _toggleButtonState(inputList, buttonElement, { inactiveButtonClass, ...rest }) {
+    _toggleButtonState(inputList, buttonElement) {
         if (this._hasInvalidInput(inputList)) {
-            buttonElement.classList.add(inactiveButtonClass);
+            buttonElement.classList.add(this._inactiveButtonClass);
             buttonElement.setAttribute('disabled', '');
         } else {
-            buttonElement.classList.remove(inactiveButtonClass);
+            buttonElement.classList.remove(this._inactiveButtonClass);
             buttonElement.removeAttribute('disabled');
         }
     }
@@ -45,23 +49,31 @@ export class FormValidator {
     _resetForm(inputList) {
         inputList.forEach((input) => {
             const inputErrorElem = this._form.querySelector(`#${input.id}-error`);
-            this._hideInputError(input, inputErrorElem, this._parameters);
+            this._hideInputError(input, inputErrorElem);
         })
     }
 
-    _setEventListeners({ inputSelector, submitButtonSelector, ...rest }) {
-        const inputList = Array.from(this._form.querySelectorAll(inputSelector));
-        const button = this._form.querySelector(submitButtonSelector);
-        this._toggleButtonState(inputList, button, rest);
-        // перед валидацией очищать все поля формы от ошибок при каждом открытии формы
-        this._resetForm(inputList);
+    _setEventListeners() {
+        const inputList = Array.from(this._form.querySelectorAll(this._inputSelector));
+        const button = this._form.querySelector(this._submitButtonSelector);
+        const openFormButtons = document.querySelectorAll(this._openFormBtn);
+
+        this._toggleButtonState(inputList, button);
 
         inputList.forEach((inputElement) => {
             inputElement.addEventListener('input', () => {
-                this._toggleButtonState(inputList, button, rest);
-                this._isValid(inputElement, rest);
+                this._isValid(inputElement);
+                this._toggleButtonState(inputList, button);
             })
         });
+
+        // при каждом открытии форм очищать все поля от ошибок      
+        openFormButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                this._resetForm(inputList);
+                this._toggleButtonState(inputList, button);
+            });
+        })
     }
 
     enableValidation() {
@@ -69,6 +81,6 @@ export class FormValidator {
             evt.preventDefault();
         })
 
-        this._setEventListeners(this._parameters);
+        this._setEventListeners();
     }
 }

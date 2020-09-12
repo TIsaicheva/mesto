@@ -27,22 +27,23 @@ export class Card {
         return this._cardItem;
     }
 
-    _like(evt) {
-        evt.target.classList.toggle('item__like-icon_active');
+    _like(btnElement) {
+        btnElement.classList.toggle('item__like-icon_active');
     }
 
     _delete() {
         this._cardItem.remove();
+        this._cardItem = null;
     }
 
     _setEventListeners() {
-        this._cardItem.addEventListener('click', (evt) => {
-            const target = evt.target.classList;
-            if (target.contains('item__delete')) {
-                this._delete();
-            } else if (target.contains('item__like-icon')) {
-                this._like(evt);
-            }
-        });
+        this._cardItem.querySelector('.item__delete').addEventListener('click', () => {
+            this._delete();
+        })
+
+        const likeBtn = this._cardItem.querySelector('.item__like-icon');
+        likeBtn.addEventListener('click', () => {
+            this._like(likeBtn);
+        })
     }
 }

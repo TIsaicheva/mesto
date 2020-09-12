@@ -22,7 +22,6 @@ const placeImageInput = addPopup.querySelector('#placeImageUrl');
 
 // popup-картинки
 const imagePopup = document.querySelector('.popup-image');
-const image = imagePopup.querySelector('.popup_image');
 const placeName = imagePopup.querySelector('.popup__place-name');
 const placeImageUrl = imagePopup.querySelector('.popup__image');
 
@@ -38,7 +37,8 @@ const formParameters = {
     submitButtonSelector: '.popup__submit',
     inactiveButtonClass: 'popup__submit_disabled',
     inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__form-error_visible'
+    errorClass: 'popup__form-error_visible',
+    formButton: '.form-button'
 };
 
 function getInputValues() {
@@ -48,20 +48,18 @@ function getInputValues() {
     return cardValues;
 }
 
-function createCard() {
-    const card = new Card(getInputValues(), cardTemplateSelector);
-    const newCard = card.generate();
-    addCardToGallery(newCard);
-}
-
 function addCardToGallery(card) {
     galleryItemsContainer.prepend(card);
 }
 
-defaultCards.forEach((defaultCard) => {
-    const card = new Card(defaultCard, cardTemplateSelector);
-    const cardElement = card.generate();
+function generateCard(data) {
+    const card = new Card(data, cardTemplateSelector);
+    const newCard = card.generate();
+    return newCard;
+}
 
+defaultCards.forEach((defaultCard) => {
+    const cardElement = generateCard(defaultCard);
     addCardToGallery(cardElement);
 });
 
@@ -78,7 +76,7 @@ function closePopupByEsc(evt) {
 }
 
 // закрытие попап кликом на оверлей
-function overlayPopup(evt) {
+function closePopupByOverlay(evt) {
     if (evt.target === evt.currentTarget) {
         closePopup(getOpenedPopup());
     }
@@ -93,14 +91,14 @@ function pressCloseIcon(evt) {
 
 function openPopup(popup) {
     popup.classList.add('popup_opened');
-    popup.addEventListener('click', overlayPopup);
+    popup.addEventListener('click', closePopupByOverlay);
     popup.addEventListener('click', pressCloseIcon);
     addEventListener('keydown', closePopupByEsc);
 }
 
 function closePopup(popup) {
     popup.classList.remove('popup_opened');
-    popup.removeEventListener('click', overlayPopup);
+    popup.removeEventListener('click', closePopupByOverlay);
     popup.removeEventListener('click', pressCloseIcon);
     removeEventListener('keydown', closePopupByEsc);
 }
@@ -117,7 +115,8 @@ function editFormSubmitHandler(evt) {
 function addFormSubmitHandler(evt) {
     evt.preventDefault();
 
-    createCard();
+    const newCard = generateCard(getInputValues());
+    addCardToGallery(newCard);
     closePopup(getOpenedPopup());
 }
 
@@ -129,9 +128,6 @@ editButton.addEventListener('click', function () {
 
     nameInput.value = userTitle.textContent;
     descriptInput.value = userSubtitle.textContent;
-
-    const editFormValidator = new FormValidator(formParameters, editPopup.querySelector(formParameters.formSelector));
-    editFormValidator.enableValidation();
 });
 
 // отслеживаем клик по кнопке add
@@ -141,14 +137,22 @@ addButton.addEventListener('click', function () {
 
     placeNameInput.value = '';
     placeImageInput.value = '';
-
-    const addFormValidator = new FormValidator(formParameters, addPopup.querySelector(formParameters.formSelector));
-    addFormValidator.enableValidation();
 });
 
 editFormElement.addEventListener('submit', editFormSubmitHandler);
 addFormElement.addEventListener('submit', addFormSubmitHandler);
 
+// Валидация формы редактирования
+const editPopupForm = editPopup.querySelector(formParameters.formSelector);
+const editFormValidator = new FormValidator(formParameters, editPopupForm);
+editFormValidator.enableValidation();
+
+// Валидация формы добавления карточки
+const addPopupForm = addPopup.querySelector(formParameters.formSelector);
+const addFormValidator = new FormValidator(formParameters, addPopupForm);
+addFormValidator.enableValidation();
+
+// Отображение картинки в попапе-изображения
 function renderImage(evt) {
     // вствляем изображение картинки, по которой кликнули в popup-картинки
     placeImageUrl.src = evt.target.src;
