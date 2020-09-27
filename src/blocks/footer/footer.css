@@ -6,13 +6,13 @@
 
 @media (max-width: 768px){
     .footer {
-        padding: 33px 90px 60px;  
+        padding: 33px 90px 60px;
     }
 }
 
 @media (max-width: 670px){
     .footer {
         max-width: 282px;
-        padding: 24px 5px 60px;  
+        padding: 24px 5px 60px;
     }
 }
