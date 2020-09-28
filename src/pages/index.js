@@ -19,22 +19,31 @@ import {
     descriptInputSelector,
     formParameters,
     editButton,
-    addButton    
+    addButton,
+    placeImageNameSelector,
+    placeImageUrlSelector
 } from '../utils/constants.js';
+const editUserProfile = new UserInfo({ userNameSelector, userInfoSelector });
+const popupImage = new PopupWithImage(imagePopupSelector, placeImageNameSelector, placeImageUrlSelector);
+let isArray = '';
+
+function createCardElement(item) {
+    const card = new Card(item, cardTemplateSelector, {
+        handleCardClick: (cardName, cardLinkImage) => {            
+            popupImage.open(cardName, cardLinkImage);
+        }
+    });
+    const cardElement = card.generate();
+    return cardElement;
+}
 
 // отображение на странице карточек по умолчанию
 const defaultCardList = new Section(
     {
         items: defaultCards,
         renderer: (item) => {
-            const card = new Card(item, cardTemplateSelector, {
-                handleCardClick: (evt) => {
-                    const addPopupImage = new PopupWithImage(imagePopupSelector);
-                    addPopupImage.open(evt.target);
-                }
-            });
-            const cardElement = card.generate();
-            defaultCardList.addItem(cardElement);
+            isArray = true;
+            defaultCardList.addItem(createCardElement(item), isArray);
         }
     }, galleryItemsContainerSelector
 );
@@ -49,14 +58,8 @@ const addFormSubmitHandler = new PopupWithForm(
                 {
                     items: [formData],
                     renderer: (item) => {
-                        const card = new Card(item, cardTemplateSelector, {
-                            handleCardClick: (evt) => {
-                                const addPopupImage = new PopupWithImage(imagePopupSelector);
-                                addPopupImage.open(evt.target);
-                            }
-                        });
-                        const cardElement = card.generate();
-                        addCardItem.addItem(cardElement);
+                        isArray = false;
+                        addCardItem.addItem(createCardElement(item), isArray);
                     }
                 }, galleryItemsContainerSelector
             );
@@ -71,7 +74,6 @@ const addFormSubmitHandler = new PopupWithForm(
 const editFormSubmitHandler = new PopupWithForm(
     {
         formSubmitHandler: (formData) => {
-            const editUserProfile = new UserInfo({ userNameSelector, userInfoSelector });
             editUserProfile.setUserInfo(formData);
             editFormSubmitHandler.close();
         }
@@ -85,13 +87,12 @@ editFormSubmitHandler.setEventListeners();
 // создаётся экземпляр класса Popup для открытия popup-редактирования профиля
 // данные пользователя со страницы подставляются в форму редактирования
 editButton.addEventListener('click', function () {
-    const popup = new Popup(editPopupSelector);
+    const popup = new PopupWithForm({ formSubmitHandler: () => {} }, editPopupSelector);
     popup.open();
     const nameInput = document.querySelector(nameInputSelector);
-    const descriptInput = document.querySelector(descriptInputSelector);
-    const userInfo = new UserInfo({ userNameSelector, userInfoSelector });    
-    const {name, description} = userInfo.getUserInfo();
-    
+    const descriptInput = document.querySelector(descriptInputSelector);  
+    const { name, description } = editUserProfile.getUserInfo();
+
     nameInput.value = name;
     descriptInput.value = description;
 });
@@ -99,7 +100,7 @@ editButton.addEventListener('click', function () {
 // отслеживается клик по кнопке add
 // создаётся экземпляр класса Popup для открытия popup-добавления карточки
 addButton.addEventListener('click', function () {
-    const popup = new Popup(addPopupSelector);
+    const popup = new PopupWithForm({ formSubmitHandler: () => {} }, addPopupSelector);
     popup.open();
 });
 

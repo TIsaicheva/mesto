@@ -3,6 +3,7 @@ import { keyCodeEsc } from '../utils/constants.js';
 export default class Popup {
     constructor(popupSelector) {
         this._popup = document.querySelector(popupSelector);
+        this._handleEscClose = this._handleEscClose.bind(this);
     }
 
     _handleEscClose(evt) {
@@ -16,15 +17,13 @@ export default class Popup {
             this.close();
         })
 
-        addEventListener('keydown', (evt) => {
-            this._handleEscClose(evt);
-        })
+        addEventListener('keydown', this._handleEscClose);
 
         this._popup.addEventListener('click', (evt) => {
             if (evt.target === evt.currentTarget) {
                 this.close();
             }
-        })
+        });
     }
 
     open() {
@@ -33,6 +32,7 @@ export default class Popup {
     }
 
     close() {
-        this._popup.classList.remove('popup_opened');
+        removeEventListener('keydown', this._handleEscClose);
+        this._popup.classList.remove('popup_opened');        
     }
 }

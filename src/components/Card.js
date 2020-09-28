@@ -1,5 +1,5 @@
 export default class Card {
-    constructor({name, link}, cardSelector, {handleCardClick}) {        
+    constructor({ name, link }, cardSelector, { handleCardClick }) {
         this._cardSelector = cardSelector;
         this._cardName = name;
         this._cardLinkImage = link;
@@ -18,7 +18,7 @@ export default class Card {
 
     generate() {
         this._cardItem = this._getTemplate();
-        
+
         this._cardItem.querySelector('.item__image').src = this._cardLinkImage;
         this._cardItem.querySelector('.item__text').textContent = this._cardName;
 
@@ -48,7 +48,7 @@ export default class Card {
         })
 
         this._cardItem.querySelector('.item__image').addEventListener('click', (evt) => {
-            this.handleCardClick(evt);
+            this.handleCardClick(this._cardName, this._cardLinkImage);
         })
     }
 }

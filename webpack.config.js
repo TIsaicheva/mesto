@@ -17,8 +17,13 @@ module.exports = {
             },
             {
                 // регулярное выражение, которое ищет все файлы с такими расширениями
-                test: /\.(png|svg|jpg|gif|ttf|woff|woff2)$/,
-                loader: 'file-loader'
+                test: /\.(png|svg|jpg|gif)$/,
+                loader: 'file-loader?name=./images/[name].[ext]'
+            },
+            {
+                // регулярное выражение, которое ищет все файлы с такими расширениями
+                test: /\.(eot|ttf|woff|woff2)$/,
+                loader: 'file-loader?name=./vendor/[name].[ext]'
             },
             {
                 test: /\.html$/,
