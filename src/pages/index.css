@@ -20,6 +20,7 @@
 @import url(../blocks/popup/__form-error/_visible/popup__form-error_visible.css);
 @import url(../blocks/popup/__image/popup__image.css);
 @import url(../blocks/popup/__place-name/popup__place-name.css);
+@import url(../blocks/popup/__confirm-request/popup__confirm-request.css);
 @import url(../blocks/profile/profile.css);
 @import url(../blocks/profile/__data/profile__data.css);
 @import url(../blocks/profile/__avatar/profile__avatar.css);
@@ -32,9 +33,12 @@
 @import url(../blocks/gallery/__items/gallery__items.css);
 @import url(../blocks/item/item.css);
 @import url(../blocks/item/__delete/item__delete.css);
+@import url(../blocks/item/__delete/__delete_none/item__delete_none.css);
 @import url(../blocks/item/__image/item__image.css);
 @import url(../blocks/item/__wrapper/item__wrapper.css);
 @import url(../blocks/item/__text/item__text.css);
+@import url(../blocks/item/__likes/item__likes.css);
+@import url(../blocks/item/__like-counter/item__like-counter.css);
 @import url(../blocks/item/__like-icon/item__like-icon.css);
 @import url(../blocks/item/__like-icon/_active/item__like-icon_active.css);
 @import url(../blocks/footer/footer.css);
