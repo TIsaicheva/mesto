@@ -48,6 +48,12 @@ function openPopup(selector) {
     popup.setEventListeners();
 }
 
+function validationForm(popupSelector) {
+    const popupForm = document.querySelector(popupSelector).querySelector(formParameters.formSelector);
+    const vormValidator = new FormValidator(formParameters, popupForm);
+    vormValidator.enableValidation();
+}
+
 function createCardElement(item) {
     const card = new Card(item, cardTemplateSelector,
         {
@@ -196,7 +202,10 @@ const editAvatarSubmitHandler = new PopupWithForm(
                 .then(() => {
                     editAvatarSubmitHandler.close();
                 })
-                .catch((err) => console.log(err))
+                .catch((err) => {
+                    console.log(err);
+                    validationForm(editAvatarPopupSelector);
+                })
                 .finally(() => {
                     editAvatarSubmitHandler.renderLoading(false);
                 });
@@ -235,11 +244,7 @@ editAvatarElement.addEventListener('click', function () {
 })
 
 /* Валидация формы редактирования */
-const editPopupForm = document.querySelector(editPopupSelector).querySelector(formParameters.formSelector);
-const editFormValidator = new FormValidator(formParameters, editPopupForm);
-editFormValidator.enableValidation();
+validationForm(editPopupSelector);
 
 /* Валидация формы добавления карточки */
-const addPopupForm = document.querySelector(addPopupSelector).querySelector(formParameters.formSelector);
-const addFormValidator = new FormValidator(formParameters, addPopupForm);
-addFormValidator.enableValidation();
+validationForm(addPopupSelector);

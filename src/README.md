@@ -22,7 +22,8 @@
 
 **gh-pages**
 
-* Проекта на GitHub Pages - https://tisaicheva.github.io/mesto/index.html
+* Проекта на GitHub Pages - https://TIsaicheva.github.io/mesto
+(https://tisaicheva.github.io/mesto/index.html)
 
 **Figma**
 
