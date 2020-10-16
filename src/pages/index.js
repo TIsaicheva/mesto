@@ -42,9 +42,10 @@ const api = new Api({
     }
 });
 
-function createPopup(selector) {
+function openPopup(selector) {
     const popup = new PopupWithForm({ formSubmitHandler: () => { } }, selector);
-    return popup;
+    popup.open();
+    popup.setEventListeners();
 }
 
 function createCardElement(item) {
@@ -212,9 +213,7 @@ editAvatarSubmitHandler.setEventListeners();
  данные пользователя со страницы подставляются в форму редактирования 
  */
 editButton.addEventListener('click', function () {
-    const popup = createPopup(editPopupSelector);
-    popup.open();
-    popup.setEventListeners();
+    openPopup(editPopupSelector);
     const nameInput = document.querySelector(nameInputSelector);
     const descriptInput = document.querySelector(descriptInputSelector);
     const { name, description } = editUserProfile.getUserInfo();
@@ -226,17 +225,13 @@ editButton.addEventListener('click', function () {
 /* отслеживается клик по кнопке add
  создаётся экземпляр класса Popup для открытия popup-добавления карточки */
 addButton.addEventListener('click', function () {
-    const popup = createPopup(addPopupSelector);
-    popup.open();
-    popup.setEventListeners();
+    openPopup(addPopupSelector);
 });
 
 /* отслеживается клик по элементу аватара пользователя
  создаётся экземпляр класса Popup для открытия popup-редактирования аватара */
 editAvatarElement.addEventListener('click', function () {
-    const popup = createPopup(editAvatarPopupSelector);
-    popup.open();
-    popup.setEventListeners();
+    openPopup(editAvatarPopupSelector);
 })
 
 /* Валидация формы редактирования */
